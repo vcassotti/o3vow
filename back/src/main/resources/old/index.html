@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+
+    {{ message }}
+
+    <p>activities</p>
+    <ul>
+        <li v-for="activity in activities">{{ activity.name }}</li>
+    </ul>
+
+    <p>notes</p>
+    <ul>
+        <li v-for="note in notes">
+            <div class="note">
+                <div class="title">{{ note.title }}</div>
+                <div class="content">{{ note.content }}</div>
+                <div class="tag">
+                    <ul>
+                        <li v-for="tag in note.tags">{{ tag }}</li>
+                    </ul>
+                </div>
+                <div class="annotation">
+                    <ul>
+                        <li v-for="annotation in note.annotations">{{ annotation }}</li>
+                    </ul>
+                </div>
+            </div>
+
+        </li>
+    </ul>
+
+    <p>tags</p>
+    <ul>
+        <li v-for="tag in tags">{{ tag.value }}</li>
+    </ul>
+
+</div>
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue !',
+            activities: null,
+            notes: null,
+            tags: null
+        },
+        created: function () {
+            this.load("/activities", function (json) {
+                this.activities = json._embedded.activities;
+            }.bind(this));
+
+            this.load("/notes", function (json) {
+                this.notes = json._embedded.notes;
+            }.bind(this));
+
+            this.load("/tags", function (json) {
+                this.tags = json._embedded.tags;
+            }.bind(this));
+        },
+        methods: {
+            load: function (url, callback) {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        callback(JSON.parse(xhr.responseText));
+                    }
+                }
+                xhr.open('GET', url, true);
+                xhr.send('');
+            }
+        }
+    })
+</script>
+</body>
+</html>

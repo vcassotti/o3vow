@@ -2,6 +2,8 @@ HELP.md
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
+/back/src/main/resources/public/
+
 ### STS ###
 .apt_generated
 .classpath
