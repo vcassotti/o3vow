@@ -1,62 +1,76 @@
 <template>
-    <el-container style="border: 1px solid #eee">
-        <el-aside style="width: 200px">
-            <el-menu :default-openeds="['1']">
-                <el-menu-item index="1">Menu 1</el-menu-item>
-                <el-menu-item index="2">Menu 2</el-menu-item>
-                <el-menu-item index="3">Menu 3</el-menu-item>
-                <el-submenu index="1">
-                    <template slot="title">Navigator</template>
-                    <el-menu-item index="1-1">Option 1</el-menu-item>
-                    <el-menu-item index="1-2">Option 2</el-menu-item>
-                    <el-menu-item index="1-3">Option 3</el-menu-item>
-                    <el-menu-item index="1-4">Option 4</el-menu-item>
-                </el-submenu>
-            </el-menu>
-        </el-aside>
-        <el-container>
-            <el-header style="text-align: right">
-                <el-dropdown>
-                    <i class="el-icon-setting" style="margin-right: 15px"></i>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>View</el-dropdown-item>
-                        <el-dropdown-item>Add</el-dropdown-item>
-                        <el-dropdown-item>Delete</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
-                <span>{{ user }}</span>
-            </el-header>
-            <el-main>
-                <router-view/>
-            </el-main>
-        </el-container>
-    </el-container>
+    <v-app id="keep">
+        <v-app-bar app clipped-left color="blue">
+            <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+            <span class="title ml-3 mr-5">Vow&nbsp;<span class="font-weight-light">Activity</span></span>
+            <v-text-field solo-inverted flat hide-details label="Search" prepend-inner-icon="search"></v-text-field>
+            <div class="flex-grow-1"></div>
+        </v-app-bar>
+        <v-navigation-drawer v-model="drawer" app clipped color="grey lighten-4">
+            <v-list dense class="grey lighten-4">
+                <template v-for="(item, i) in items">
+                    <v-row v-if="item.heading" :key="i" align="center">
+                        <v-col cols="6">
+                            <v-subheader v-if="item.heading">
+                                {{ item.heading }}
+                            </v-subheader>
+                        </v-col>
+                        <v-col cols="6" class="text-right">
+                            <v-btn small text>edit</v-btn>
+                        </v-col>
+                    </v-row>
+                    <v-divider v-else-if="item.divider" :key="i" dark class="my-4"></v-divider>
+                    <v-list-item v-else :key="i" @click="go(item)">
+                        <v-list-item-action>
+                            <v-icon>{{ item.icon }}</v-icon>
+                        </v-list-item-action>
+                        <v-list-item-content>
+                            <v-list-item-title class="grey--text">
+                                {{ item.text }}
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </v-list>
+        </v-navigation-drawer>
+        <v-content>
+            <router-view/>
+        </v-content>
+    </v-app>
 </template>
 
 <script>
     export default {
-        data() {
-            return {
-                user: 'vincent',
-                activeName: 'first'
-            };
-        },
+        name: 'App',
+        data: () => ({
+            drawer: null,
+            items: [
+                {icon: 'lightbulb_outline', text: 'Notes'},
+                {icon: 'touch_app', text: 'Reminders'},
+                {divider: true},
+                {heading: 'Labels'},
+                {icon: 'add', text: 'Create new label'},
+                {divider: true},
+                {icon: 'archive', text: 'Archive'},
+                {icon: 'delete', text: 'Trash'},
+                {divider: true},
+                {icon: 'settings', text: 'Settings'},
+                {icon: 'chat_bubble', text: 'Trash'},
+                {icon: 'help', text: 'Help'},
+                {icon: 'phonelink', text: 'App downloads'},
+                {icon: 'keyboard', text: 'Keyboard shortcuts'},
+            ],
+        }),
         methods: {
-            handleClick(tab, event) {
-                console.log(tab, event);
+            go (e) {
+                console.log("gone " + JSON.stringify(e));
             }
         }
     };
 </script>
 
-
-<style lang="scss">
-    .el-header {
-        background-color: #B3C0D1;
-        color: #333;
-        line-height: 60px;
-    }
-    .el-aside {
-        color: #333;
+<style>
+    #keep .v-navigation-drawer__border {
+        display: none
     }
 </style>

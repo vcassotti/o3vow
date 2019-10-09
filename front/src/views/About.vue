@@ -1,16 +1,13 @@
 <template>
-  <Help msg="About"/>
+  <HelloWorld />
 </template>
 
 <script>
-  import Help from "@/components/Help.vue";
+  import HelloWorld from '../components/HelloWorld';
+
   export default {
-    name: "help",
     components: {
-      Help
-    }
+      HelloWorld,
+    },
   };
 </script>
-
-<style lang="scss">
-</style>
